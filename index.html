@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>出海收款到账试算 · 大陆个人开发者费率对比站</title>
+  <meta name="description" content="面向大陆个人出海开发者的收款路径年成本试算：Creem / Paddle / Lemon Squeezy / Stripe HK / Payoneer / 万里汇 / Apple IAP。纯静态、零后端、不构成税务或法律建议。" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- 显著免责声明：置顶横幅，不得移除 -->
+  <div class="disclaimer-banner" role="note">
+    ⚠️ <strong>免责声明</strong>：本站为信息参考工具，<strong>不构成税务、法律或投资建议</strong>。费率与政策可能随时变化（数据快照 2026-10-28，来源见各路径卡）；重大决策请咨询专业税务/法律人士，并逐条向官方复核。
+  </div>
+
+  <header class="site-header">
+    <h1>出海收款到账试算</h1>
+    <p class="subtitle">面向大陆个人出海开发者的收款路径年成本对比 · 覆盖 App / SaaS / 内容三类场景 · 纯静态零后端</p>
+  </header>
+
+  <main>
+    <!-- ① 计算器 -->
+    <section id="calc" aria-labelledby="calc-h">
+      <h2 id="calc-h">① 试算器</h2>
+      <div class="calc-form">
+        <label>月流水（USD/月）
+          <input type="number" id="in-monthly" min="1" step="any" value="2000" />
+        </label>
+        <label>客单价（USD/笔）
+          <input type="number" id="in-aov" min="0.01" step="any" value="25" />
+        </label>
+        <label>场景
+          <select id="in-scenario">
+            <option value="saas">SaaS / 订阅软件</option>
+            <option value="app">App（应用商店 / 广告变现）</option>
+            <option value="content">内容 / 数字商品</option>
+          </select>
+        </label>
+        <details class="advanced">
+          <summary>高级假设（可选）</summary>
+          <label>换汇/汇损假设（%，回款人民币化模拟；默认 0）
+            <input type="number" id="in-fx" min="0" max="20" step="0.1" value="0" />
+          </label>
+          <label>CNY/USD 参考汇率（仅用于限额换算提示，不进成本计算）
+            <input type="number" id="in-rate" min="1" step="0.01" value="7.2" />
+          </label>
+          <p class="hint-text">各路径换汇官方口径不同：Stripe +2%（官方公布）、万里汇宣称 0 汇损、其余未公布——默认 0 表示不计入，需要保守模拟时自行填写。</p>
+        </details>
+      </div>
+      <p id="calc-error" class="calc-error" hidden></p>
+    </section>
+
+    <!-- ② 结果对比 -->
+    <section id="result" aria-labelledby="result-h">
+      <h2 id="result-h">② 各路径年成本对比</h2>
+      <p id="summary-line" class="summary-line"></p>
+      <p id="scenario-note" class="scenario-note"></p>
+      <div class="table-wrap">
+        <table id="result-table">
+          <thead>
+            <tr>
+              <th>路径</th>
+              <th>年成本（USD）</th>
+              <th>占年流水</th>
+              <th>到账周期</th>
+              <th>适用性与提示</th>
+            </tr>
+          </thead>
+          <tbody><!-- JS 渲染 --></tbody>
+        </table>
+      </div>
+      <ul id="global-notes" class="global-notes"></ul>
+    </section>
+
+    <!-- ③ 路径详解卡 -->
+    <section id="paths" aria-labelledby="paths-h">
+      <h2 id="paths-h">③ 路径详解卡（费率原文与来源）</h2>
+      <div id="path-cards" class="cards"><!-- JS 渲染 --></div>
+    </section>
+
+    <!-- ④ 政策状态表（手工维护区：编辑 js/data.mjs 的 POLICY_STATUS 数组） -->
+    <section id="policy" aria-labelledby="policy-h">
+      <h2 id="policy-h">④ 政策状态表<span class="maintain-tag">手工维护区：编辑 <code>js/data.mjs</code> 的 <code>POLICY_STATUS</code></span></h2>
+      <div class="table-wrap">
+        <table id="policy-table">
+          <thead>
+            <tr><th>事项</th><th>状态</th><th>说明</th><th>核对日期</th></tr>
+          </thead>
+          <tbody><!-- JS 渲染 --></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ⑤ 返佣与联盟占位（全部为占位，未接入任何真实链接） -->
+    <section id="affiliate" aria-labelledby="affiliate-h">
+      <h2 id="affiliate-h">⑤ 返佣与联盟（占位区）</h2>
+      <div class="cards">
+        <article class="card affiliate-card">
+          <h3>万里汇 WorldFirst 返佣 <span class="badge badge-warn">给定背景 · 条款可变</span></h3>
+          <p>站点侧返佣条款：<strong>¥1000/人</strong>，要求 <strong>180 天内入账 ≥$100</strong>。该条款为给定背景、<em>可变</em>，不进费率计算；回填邀请链接前须与万里汇官方最新条款核对。</p>
+          <p class="placeholder-slot">【占位】返佣邀请链接：<code data-affiliate="worldfirst-referral">待回填</code></p>
+        </article>
+        <article class="card affiliate-card">
+          <h3>Creem 返佣 / 联盟 <span class="badge badge-warn">占位 · 待核实</span></h3>
+          <p>Creem 官方返佣与联盟条款数字本次材料未核定（联盟附加费 2% 见路径卡，与返佣是两回事）；回填前须官方页实抓核对。</p>
+          <p class="placeholder-slot">【占位】返佣/联盟链接：<code data-affiliate="creem-referral">待回填</code></p>
+        </article>
+        <article class="card affiliate-card">
+          <h3>其他联盟位 <span class="badge badge-warn">占位</span></h3>
+          <p>Paddle / Lemon Squeezy 联盟位占位。接入后所有外链应加 <code>rel="sponsored nofollow"</code> 并在本区公示佣金关系。</p>
+          <p class="placeholder-slot">【占位】<code data-affiliate="paddle-affiliate">待回填</code> · <code data-affiliate="lemonsqueezy-affiliate">待回填</code></p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><strong>免责声明（请务必阅读）</strong>：本站所有内容（含试算结果、费率表、政策状态表）仅为公开信息整理与数学演算，<strong>不构成税务、法律、会计或投资建议</strong>，亦不构成对任何服务商的推荐。费率与政策可能随时变化——本站数据快照日期为 2026-10-28（各来源官方页实抓，出处见路径详解卡）；采用任一路径前，请逐条向官方复核现行条款，并就境外所得申报、结汇额度、主体架构等事项咨询专业税务/法律人士。</p>
+    <p>本站为纯静态页面：无后端、无数据库、无追踪脚本；计算全部在浏览器本地完成。费率数据与计算口径见 <code>js/data.mjs</code> 与 <code>js/calc.mjs</code>。</p>
+  </footer>
+
+  <noscript>
+    <p class="noscript-note">本站计算器需要启用 JavaScript（纯前端本地计算，无任何后端请求）。</p>
+  </noscript>
+
+  <script type="module" src="js/app.mjs"></script>
+</body>
+</html>
